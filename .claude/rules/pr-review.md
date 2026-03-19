@@ -19,17 +19,9 @@
 - 구체적인 변경 사항 목록
 
 ## 다이어그램 (복잡한 로직 변경 시)
-- Mermaid를 활용하여 플로우/구조를 시각화
-- 예: 상태 변화, API 호출 흐름, 모듈 간 의존성 등
-
-```mermaid
-flowchart LR
-    A[로그인 요청] --> B{인증 방식}
-    B --> C[Apple Login]
-    B --> D[Google Login]
-    C --> E[토큰 발급]
-    D --> E
-```
+- Mermaid 코드블록을 활용하여 플로우/구조를 시각화
+- 활용 예: 상태 변화, API 호출 흐름, 모듈 간 의존성
+- flowchart, sequenceDiagram, stateDiagram 등 상황에 맞는 타입 사용
 
 ## 스크린샷 (UI 변경 시)
 | Before | After |
