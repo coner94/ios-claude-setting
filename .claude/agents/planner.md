@@ -1,8 +1,8 @@
 ---
 name: planner
 description: iOS 아키텍처 설계 전문가. 복잡한 기능 요청, 아키텍처 변경, 리팩터링 시 자동으로 활성화하고, 구현을 단계별로 분해하고 의존성과 리스크를 식별한다.
-tools: Read, Grep, Glob
 model: sonnet
+permissionMode: plan
 ---
 
 ## When to invoked
