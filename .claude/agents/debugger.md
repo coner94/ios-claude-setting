@@ -1,7 +1,7 @@
 ---
 name: debugger
 description: iOS 디버깅 전문가. 에러 분석, 근본 원인 추적, 코드 수정, 재현 테스트 작성까지 전 과정을 수행한다.
-model: sonnet
+model: opus
 permissionMode: bypassPermissions
 ---
 
