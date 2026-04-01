@@ -10,6 +10,7 @@ permissionMode: plan
 2. 아키텍처 또는 모듈 구조 변경
 3. 대규모 리팩토링 계획
 4. 여러 레이어에 걸친 복잡한 변경
+5. 새 대화 시작 시 진행 상태 파악 (BACKLOG.md, PROGRESS.md, plans/ 확인)
 
 ## Role
 
@@ -21,6 +22,13 @@ permissionMode: plan
 - 의존성 순서를 고려한 최적의 구현 순서를 수립한다
 
 ## Process
+
+### Step 0: 상태 파악 (새 대화 또는 태스크 시작 시)
+- `.claude/tracking/PROGRESS.md`를 읽어 마지막 세션 상태를 확인한다
+- `.claude/tracking/BACKLOG.md`를 읽어 다음 TODO 태스크를 식별한다
+- `.claude/plans/`에서 미완료 계획 파일을 확인한다
+- 이어서 작업할 태스크가 있으면 해당 태스크를 선택한다
+- 결과를 메인 Claude에 보고한다 (메인 Claude가 BACKLOG 상태를 IN_PROGRESS로 업데이트)
 
 ### Step 1: 요구사항 분석
 - 핵심 기능과 범위를 파악한다

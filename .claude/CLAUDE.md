@@ -1,9 +1,12 @@
 # iOS Claude Setting
 
 ## 개요
-iOS 앱 프로젝트 시작 시 공통으로 사용하는 Claude Code 설정 템플릿
+
+iOS 앱 프로젝트를 위한 Claude Code 하네스 설정.
+에이전트 역할 분담, 자율 실행 루프, 품질 게이트, 설계 청사진을 통해 일관된 개발 워크플로우를 제공한다.
 
 ## 기술 스택
+
 - 언어: Swift 6
 - UI: SwiftUI + Observation 프레임워크
 - 동시성: Swift Concurrency (async/await, Actor)
@@ -12,32 +15,103 @@ iOS 앱 프로젝트 시작 시 공통으로 사용하는 Claude Code 설정 템
 - 의존성 매니저: SPM
 
 ## 아키텍처
-{프로젝트에 맞게 작성}
+
+- 디렉토리 구조 및 의존성 규칙 → `blueprint/package-structure.md`
+- Protocol 템플릿 및 공통 타입 → `blueprint/interfaces.md`
+- 의사결정 기록 → `tracking/decisions.md`
 
 ## 주요 의존성
+
 - 네트워크: {Alamofire, Moya}
 - DI: {Swinject}
 - 분석: {Firebase (Google Analytics)}
 
-## 개발 워크플로우
+## 시작하기
 
-기능 개발 시 아래 순서를 따른다.
+- **기존 프로젝트에 적용**: `/onboard` — 프로젝트를 스캔하여 blueprint, CLAUDE.md, 설정을 자동 초기화
+- **새 프로젝트**: blueprint 템플릿을 직접 채우고 시작
 
-1. **계획** — `planner` 에이전트로 구현 계획을 수립하고 사용자 확인을 받은 뒤, `/plan-write` 스킬로 `.claude/plans/{기능명}.md`에 저장한다.
-2. **브랜치 생성** — `git` 에이전트로 작업 브랜치를 생성한다
-3. **테스트 작성 (Red)** — `tester` 에이전트로 실패하는 테스트를 먼저 작성한다
-4. **구현 (Green)** — 테스트를 통과시키기 위한 최소한의 코드를 직접 작성한다
-5. **리팩토링** — 코드를 개선한다. 필요시 `refactorer` 에이전트를 호출한다
-6. **커밋/푸시/PR** — `git` 에이전트로 커밋, 푸시, PR 생성을 수행한다
+## 실행 모델
 
-- 태스크가 여러 개면 태스크별로 3~6을 반복한다
-- 태스크 완료 시 계획 파일의 체크박스를 `[x]`로 업데이트한다
-- 버그 수정 시 `debugger` 에이전트를 사용한다 (진단 → 수정 → 검증)
-- PR 생성 후 `reviewer` 에이전트로 코드 리뷰를 수행할 수 있다
-- **새 대화 시작 시** `.claude/plans/`에 진행 중인 계획이 있으면 확인하고 이어서 작업한다
+### 워크플로우
+
+```
+SELECT → PLAN → BRANCH → RED → GREEN → REFACTOR → VERIFY → COMMIT → PROGRESS → NEXT
+```
+
+상세 → `rules/execution-loop.md`
+
+### 에이전트 역할 순서
+
+```
+planner → git(브랜치) → tester(Red) → 구현(Green) → refactorer → reviewer → git(커밋/PR)
+```
+
+| 에이전트 | 역할 | 모델 |
+|---|---|---|
+| planner | 상태 파악, 요구사항 분석, 태스크 분해 | opus |
+| tester | TDD Red Phase — 실패하는 테스트 작성 | sonnet |
+| refactorer | 동작 변경 없는 코드 개선 | sonnet |
+| reviewer | 코드 품질, 컨벤션, 잠재 버그 검토 | sonnet |
+| debugger | 진단 → 수정 → 검증 | opus |
+| git | 브랜치, 커밋, 푸시, PR | sonnet |
+
+상세 → `rules/roles.md`
+
+### 품질 게이트
+
+| Gate | 검증 | 도구 |
+|---|---|---|
+| 1. 빌드 | 컴파일 성공, 경고 0 | xcodebuild |
+| 2. 린트 | 스타일 위반 0 | SwiftLint |
+| 3. 테스트 | 전체 통과, 새 코드 커버리지 | xcodebuild test |
+| 4. 컨벤션 | Swift/Git/테스트 규칙 준수 | 수동 체크 |
+| 5. PR | 300줄 이하, 템플릿 준수 | gh |
+
+상세 → `rules/quality-gates.md`
+
+### Hook 자동화
+
+| 시점 | 동작 | 스크립트 |
+|---|---|---|
+| 커밋 전 (PreToolUse) | staged Swift 파일 SwiftLint 검증 | `scripts/lint.sh` |
+| 파일 수정 후 (PostToolUse) | xcodebuild 빌드 검증 | `scripts/build.sh` |
+
+### 프로젝트 추적
+
+| 파일 | 역할 | 관리 주체 |
+|---|---|---|
+| `tracking/BACKLOG.md` | 태스크 백로그 | planner(선택) + 메인(업데이트) |
+| `tracking/PROGRESS.md` | 세션 간 핸드오프 | planner(읽기) + 메인(쓰기) |
+| `tracking/decisions.md` | 아키텍처 의사결정 기록 | 필요 시 기록 |
+
+### 새 대화 시작 시
+
+1. `planner`를 호출하여 `tracking/PROGRESS.md`, `tracking/BACKLOG.md`, `plans/`를 확인한다
+2. 사용자에게 현재 상태를 요약한다
+3. 이어서 작업할지 확인한다
 
 ## 컨벤션
-- `.claude/rules/swift-style.md` — Swift 코드 컨벤션
-- `.claude/rules/testing.md` — Swift Testing 기반 테스트 규칙
-- `.claude/rules/git-flow.md` — Git Flow 브랜치 전략, 커밋 컨벤션
-- `.claude/rules/pr-template.md` — PR 작성 규칙
+
+| 규칙 | 파일 |
+|---|---|
+| Swift 코드 스타일 | `rules/swift-style.md` |
+| Swift Testing 테스트 | `rules/testing.md` |
+| Git Flow 브랜치/커밋 | `rules/git-flow.md` |
+| PR 작성 | `rules/pr-template.md` |
+
+## 디렉토리 구조
+
+```
+.claude/
+├── CLAUDE.md              ← 진입점 (이 파일)
+├── settings.json          ← hook, 플러그인 설정
+├── agents/                ← 에이전트 정의 (6개)
+├── rules/                 ← 불변 규칙 (7개)
+├── skills/                ← 자동화 스킬
+├── plans/                 ← 구현 계획 (태스크별)
+├── blueprint/             ← 설계 청사진
+├── tracking/              ← 프로젝트 추적
+├── scripts/               ← hook 스크립트
+└── docs/                  ← 기타 문서
+```
