@@ -46,11 +46,11 @@ xcodebuild test -scheme {Scheme} -destination 'platform=iOS Simulator,name=iPhon
 | 에이전트 | 필수 게이트 |
 |---|---|
 | planner | 없음 (계획만 수립) |
-| tester | Gate 1, 3 |
-| 구현 (메인) | Gate 1, 2, 3 |
-| refactorer | Gate 1, 2, 3 |
+| tester | Gate 1, 2, 3 |
 | reviewer | Gate 4 |
 | git (PR) | Gate 1, 2, 3, 4, 5 |
+| refactorer (선택) | Gate 1, 2, 3 |
+| debugger (선택) | Gate 1, 3 |
 
 ## 실패 정책
 

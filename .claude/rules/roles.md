@@ -5,8 +5,10 @@
 ## 역할 순서
 
 ```
-planner → git(브랜치) → tester(Red) → 구현(Green) → refactorer → reviewer → git(커밋/PR)
+planner → git(브랜치) → tester(TDD) → reviewer → git(커밋/PR)
 ```
+
+`refactorer`와 `debugger`는 필수 흐름에 포함되지 않는다. 각각 **사용자가 리팩토링을 요청했을 때**, **버그가 발생했을 때**만 호출한다.
 
 ## 역할별 책임과 핸드오프 조건
 
@@ -20,45 +22,43 @@ planner → git(브랜치) → tester(Red) → 구현(Green) → refactorer → 
 - **산출물**: `feature/*`, `bugfix/*`, `refactor/*` 브랜치
 - **핸드오프 조건**: 브랜치가 생성되고 체크아웃 완료
 
-### 3. Tester — Red Phase
-- **책임**: 실패하는 테스트를 먼저 작성
-- **산출물**: `{Target}Tests.swift`, 필요시 `Mock*.swift`
-- **핸드오프 조건**: 테스트가 작성되고 **실패하는 것을 확인** (Red 상태)
-
-### 4. 구현 — Green Phase
-- **책임**: 테스트를 통과시키기 위한 최소한의 코드 작성
-- **산출물**: 구현 코드 파일들
+### 3. Tester — TDD 사이클
+- **책임**: TDD 사이클(Red → Green → Refactor)로 테스트와 구현을 작성
+  - Red: 실패하는 테스트를 먼저 작성한다
+  - Green: 테스트를 통과시키기 위한 최소한의 구현을 작성한다
+  - Refactor: 중복 제거 및 코드 개선 (테스트 통과 유지)
+- **산출물**: `{Target}Tests.swift`, 구현 코드, 필요시 `Mock*.swift`
 - **핸드오프 조건**: Gate 1(빌드) + Gate 3(테스트) 통과
 
-### 5. Refactorer (선택)
-- **책임**: 코드 품질 개선 (기존 동작 변경 없이)
-- **산출물**: 리팩토링된 코드
-- **핸드오프 조건**: Gate 1(빌드) + Gate 2(린트) + Gate 3(테스트) 통과
-- 필요 없으면 건너뛸 수 있다
-
-### 6. Reviewer
+### 4. Reviewer
 - **책임**: 코드 품질, 컨벤션 준수, 잠재적 버그 검토
 - **산출물**: 리뷰 결과 (Critical / Warning / Suggestion)
 - **핸드오프 조건**: Critical 이슈 0개
-- Critical 이슈 발견 시 → 구현 또는 refactorer로 돌아가 수정
+- Critical 이슈 발견 시 → tester로 돌아가 수정
 
-### 7. Git — 커밋/푸시/PR
+### 5. Git — 커밋/푸시/PR
 - **책임**: 커밋, 푸시, PR 생성
 - **산출물**: PR URL
 - **핸드오프 조건**: PR 생성 완료
 
 ## 역할 전환 규칙
 
-- 역할 순서를 건너뛸 수 없다 (refactorer만 예외)
+- 역할 순서를 건너뛸 수 없다
 - 핸드오프 조건을 충족하지 못하면 다음 역할로 넘어가지 않는다
 - Reviewer에서 Critical 발견 시 이전 역할로 되돌아간다
-- 버그 수정 시 `debugger`가 Planner 역할을 대체한다: `debugger → git(브랜치) → tester → 구현 → git(커밋/PR)`
 - 단순 작업(오타 수정, 설정 변경 등)은 역할 시스템을 생략할 수 있다
+
+## 선택적 에이전트
+
+필수 워크플로우 외에 요청/상황에 따라 호출한다.
+
+- **refactorer**: 사용자가 리팩토링을 요청했을 때 호출한다. 동작 변경 없이 Gate 1/2/3을 통과해야 한다.
+- **debugger**: 버그/에러가 발생했을 때 Planner 역할을 대체한다: `debugger → git(브랜치) → tester(TDD) → git(커밋/PR)`
 
 ## 다중 태스크 처리
 
 태스크가 여러 개일 때:
 1. Planner가 전체 태스크 목록과 순서를 수립한다
-2. 태스크별로 `tester → 구현 → refactorer → reviewer → git(커밋)` 사이클을 반복한다
+2. 태스크별로 `tester(TDD) → reviewer → git(커밋)` 사이클을 반복한다
 3. 모든 태스크 완료 후 git이 최종 푸시와 PR을 생성한다
 4. 태스크 완료 시 계획 파일의 체크박스를 `[x]`로 업데이트한다

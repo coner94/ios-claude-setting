@@ -1,21 +1,21 @@
 ---
-name: test
-description: Swift Testing 프레임워크 기반 테스트 작성 스킬. TDD 에이전트(tester)가 호출하거나 사용자가 /test로 직접 호출할 수 있다.
+name: tdd-workflow
+description: Swift Testing 프레임워크 기반 테스트 작성 스킬. TDD 에이전트(tester)가 호출하거나 사용자가 /tdd-workflow로 직접 호출할 수 있다.
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit
 ---
 
 # Swift Testing 테스트 작성
 
 Swift Testing 프레임워크를 사용하여 테스트 코드를 작성한다.
-tester 에이전트의 TDD 사이클에서 호출되거나, 사용자가 `/test {대상}`으로 직접 호출할 수 있다.
+tester 에이전트의 TDD 사이클에서 호출되거나, 사용자가 `/tdd-workflow {대상}`으로 직접 호출할 수 있다.
 
 컨벤션은 `.claude/rules/testing.md`를 따른다.
 
 ## ARGUMENTS
 
 - `$ARGUMENTS`: 테스트 대상 설명 (필수)
-  - 예: `/test LoginViewModel 이메일 유효성 검증`
-  - 예: `/test UserRepository fetch 메서드`
+  - 예: `/tdd-workflow LoginViewModel 이메일 유효성 검증`
+  - 예: `/tdd-workflow UserRepository fetch 메서드`
 
 ---
 
