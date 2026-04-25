@@ -182,9 +182,3 @@ func testReadError() async {
 - actor와 함께 사용할 때 `Sendable` 채택 누락
 - 과잉 설계: 외부 의존성이 없는 타입에는 프로토콜이 필요 없다
 
-## When to Use
-
-- 파일 시스템, 네트워크, 외부 API를 다루는 모든 Swift 코드
-- 실제 환경에서 유발하기 어려운 에러 핸들링 경로 테스트
-- 앱, 테스트, SwiftUI 프리뷰 컨텍스트에서 모두 동작해야 하는 모듈 개발
-- 테스트 가능한 아키텍처가 필요한 Swift 동시성(actor, structured concurrency) 앱

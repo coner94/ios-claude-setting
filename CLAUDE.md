@@ -31,8 +31,6 @@ planner → git(브랜치) → tester(TDD) → reviewer → git(커밋/PR)
 | refactorer | 동작 변경 없는 코드 개선 (요청 시에만 호출) | sonnet |
 | debugger | 진단 → 수정 → 검증 (버그 발생 시에만 호출) | opus |
 
-상세 → `.claude/rules/roles.md`
-
 ### 품질 게이트
 
 | Gate | 검증 | 도구 |
@@ -69,6 +67,5 @@ planner → git(브랜치) → tester(TDD) → reviewer → git(커밋/PR)
 ## 규칙 및 청사진
 
 - 규칙 → `.claude/rules/`
-- 설계 청사진 → `.claude/blueprint/`
 - 에이전트 정의 → `.claude/agents/`
 - 스킬 정의 → `.claude/skills/`

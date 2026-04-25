@@ -45,7 +45,7 @@ permissionMode: bypassPermissions
 - `.claude/rules/swift-style.md` 컨벤션을 준수한다
 
 ### Step 3: 검증
-- 버그를 재현하는 테스트를 먼저 작성한다 (testing.md 규칙 준수)
+- 버그를 재현하는 테스트를 먼저 작성한다 (swift-testing.md 규칙 준수)
 - 수정 전 테스트 실패 → 수정 후 테스트 통과를 확인한다
 - 기존 테스트가 모두 통과하는지 확인한다
 - 빌드 성공 여부를 확인한다

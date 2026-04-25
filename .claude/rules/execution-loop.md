@@ -1,11 +1,11 @@
-# 실행 루프
+# execution-loop
 
 Claude가 태스크를 자율적으로 수행할 때 따르는 실행 사이클이다.
 
 ## 실행 사이클
 
 ```
-SELECT → PLAN → BRANCH → TDD → VERIFY → COMMIT → PROGRESS → NEXT
+SELECT → PLAN → BRANCH → TDD → VERIFY → REVIEW → COMMIT → PROGRESS → NEXT
 ```
 
 ### 1. SELECT
@@ -22,7 +22,7 @@ SELECT → PLAN → BRANCH → TDD → VERIFY → COMMIT → PROGRESS → NEXT
 - `git` 에이전트로 `git-flow.md` 규칙에 따라 브랜치를 생성한다
 - 이미 작업 브랜치에 있으면 건너뛴다
 
-### 4. TDD (Red → Green)
+### 4. TDD (Red → Green → Refactor)
 - `tester` 에이전트로 TDD 사이클을 수행한다
   - Red: 실패하는 테스트를 먼저 작성한다
   - Green: 테스트를 통과시키기 위한 최소한의 구현을 작성한다
@@ -33,21 +33,24 @@ SELECT → PLAN → BRANCH → TDD → VERIFY → COMMIT → PROGRESS → NEXT
 - 실패 시 원인을 분석하고 수정한다 (최대 3회)
 - 3회 실패 시 BLOCKED → 사용자에게 보고
 
-### 6. COMMIT
-- `git` 에이전트로 커밋한다
-- 커밋 메시지는 `git-flow.md` 컨벤션을 따른다
+### 6. REVIEW — `reviewer`
+- 코드 품질, 컨벤션 준수, 잠재적 버그를 검토한다 (Gate 4)
+- Critical 이슈 발견 시 → TDD 단계로 돌아가 수정한다
+- Critical 이슈 없으면 다음 단계로 진행한다
+
+### 7. COMMIT — `git`
+- `git-flow.md` 커밋 컨벤션에 따라 커밋한다
 - 다중 태스크 시 태스크별로 커밋한다
 
-### 7. PROGRESS
+### 8. PROGRESS
 - 메인 Claude가 직접 수행한다 (planner를 호출하지 않는다):
   - 계획 파일의 완료된 태스크를 `[x]`로 체크한다
   - tracking/BACKLOG.md의 태스크를 `DONE`으로 표시한다
   - tracking/PROGRESS.md의 현재 상태를 업데이트한다
 
-### 8. NEXT
+### 9. NEXT
 - 다음 태스크가 있으면 Step 4(TDD)로 돌아간다
 - 모든 태스크 완료 시 `git` 에이전트로 푸시 + PR 생성
-- `reviewer` 에이전트로 최종 리뷰 (선택)
 
 ## 새 대화 시작 시
 
@@ -71,3 +74,12 @@ SELECT → PLAN → BRANCH → TDD → VERIFY → COMMIT → PROGRESS → NEXT
 - 컨텍스트 사용량이 40%를 초과하면 사용자에게 알린다
 - 현재까지의 진행 상황을 tracking/PROGRESS.md에 기록한다
 - 새 대화에서 이어서 작업할 수 있도록 충분한 정보를 남긴다
+
+## Integration with Other Rules
+
+| 파일 | 설명 |
+|---|---|
+| [`git-flow.md`](.claude/rules/git-flow.md) | BRANCH, COMMIT 단계에서 사용하는 브랜치 전략 및 커밋 컨벤션 |
+| [`quality-gates.md`](.claude/rules/quality-gates.md) | VERIFY 단계에서 실행하는 게이트 정의 및 실패 정책 |
+| [`swift-style.md`](.claude/rules/swift-style.md) | GREEN, REFACTOR 단계에서 준수하는 Swift 코드 컨벤션 |
+| [`swift-testing.md`](.claude/rules/swift-testing.md) | RED, GREEN 단계에서 준수하는 테스트 작성 규칙 |

@@ -38,6 +38,6 @@ skills:
 
 ## Rules
 
-- `.claude/rules/testing.md`의 모든 규칙을 준수한다
+- `.claude/rules/swift-testing.md`의 모든 규칙을 준수한다
 - 테스트를 통과시키기 위해 테스트를 수정하지 않는다 (구현을 수정한다)
 - Green 단계에서 과도한 설계를 하지 않는다 (Refactor에서 개선)

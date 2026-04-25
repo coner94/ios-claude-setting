@@ -1,20 +1,24 @@
 ---
-name: pr
-description: git-flow.md, pr-template.md 규칙에 맞게 PR을 생성한다. git 에이전트가 호출하거나 사용자가 /pr로 직접 호출할 수 있다.
+name: pull-request
+description: git-flow.md, pr-template.md 규칙에 맞게 PR을 생성한다.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Pull Request 생성
 
 `.claude/rules/git-flow.md`와 `.claude/rules/pr-template.md` 규칙에 따라 PR을 생성한다.
-git 에이전트가 호출하거나, 사용자가 `/pr`로 직접 호출할 수 있다.
+
+## When to Activate
+
+- git 에이전트가 커밋/푸시 완료 후 PR 생성을 요청할 때
+- 사용자가 `/pull-request`로 직접 호출할 때
 
 ## 인자
 
 - `$ARGUMENTS`: PR 관련 정보 (선택)
-  - 예: `/pr`
-  - 예: `/pr PROJ-123`
-  - 예: `/pr base:main`
+  - 예: `/pull-request`
+  - 예: `/pull-request PROJ-123`
+  - 예: `/pull-request base:main`
 
 ---
 
@@ -51,12 +55,46 @@ git diff {base}...HEAD --stat
 - `$ARGUMENTS`에 티켓번호가 있으면 사용
 - 없으면 `[NO-TICKET]`
 
-### 본문
+### 본문 템플릿
 
-- `.claude/rules/pr-template.md` 규칙에 따라 본문을 작성한다
-- diff를 분석하여 필수/선택 섹션을 자동으로 채운다
-- 해당 없는 섹션은 제거한다 (빈 섹션 금지)
+diff를 분석하여 아래 템플릿을 채운다.
+- 해당 없는 선택 섹션은 완전히 제거한다 (빈 섹션 금지)
 - PR 크기가 300줄 초과 시 경고를 출력한다
+- 자동 생성 파일(xib, storyboard, 패키지)은 줄 수 계산에서 제외한다
+
+```markdown
+## 개요
+
+{변경 사항 1~2줄 요약}
+
+## 변경 내용
+
+- {변경 항목 1}
+- {변경 항목 2}
+
+## 테스트
+
+- [ ] {테스트 항목 1}
+- [ ] {테스트 항목 2}
+
+<!-- 아래 선택 섹션은 해당할 때만 포함 -->
+
+## 다이어그램
+
+```mermaid
+{복잡한 로직 변경 시 Mermaid 다이어그램}
+```
+
+## 스크린샷
+
+| Before | After |
+|--------|-------|
+| {이전 스크린샷} | {이후 스크린샷} |
+
+## 참고 사항
+
+{리뷰어가 알아야 할 컨텍스트}
+```
 
 ---
 

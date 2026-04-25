@@ -146,7 +146,3 @@ final class QuestionListViewModel {
 - actor 메서드 호출이 모두 `await`임을 잊는 것 — 호출자는 비동기 컨텍스트를 처리해야 함
 - actor 격리를 우회하기 위해 `nonisolated` 사용 (목적에 위배)
 
-## When to Use
-
-- 동시성 보호가 없는 저장소를 직접 접근하고, 여러 컨텍스트에서 동시에 호출될 수 있는 경우
-- 레거시 `DispatchQueue` 기반 스레드 안전성을 최신 Swift 동시성으로 교체하는 경우

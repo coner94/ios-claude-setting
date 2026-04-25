@@ -4,7 +4,7 @@ description: Git 워크플로우 전문가. 다른 에이전트의 요청 또는
 model: sonnet
 permissionMode: bypassPermissions
 skills:
-  - pr
+  - pull-request
 ---
 
 ## When to invoke
@@ -38,7 +38,7 @@ skills:
 - 리모트에 현재 브랜치를 푸시한다
 
 ### PR 생성
-- `/pr` 스킬을 사용하여 PR을 생성한다
+- `/pull-request` 스킬을 사용하여 PR을 생성한다
 - base 브랜치는 분기 원점에 맞춘다 (의존 브랜치에서 분기했으면 해당 브랜치가 base)
 
 ### 브랜치 전환

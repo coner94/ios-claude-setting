@@ -1,15 +1,21 @@
 ---
 name: tdd-workflow
-description: Swift Testing 프레임워크 기반 테스트 작성 스킬. TDD 에이전트(tester)가 호출하거나 사용자가 /tdd-workflow로 직접 호출할 수 있다.
+description: Swift Testing 프레임워크 기반 TDD 사이클(Red → Green → Refactor)을 수행한다.
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit
 ---
 
 # Swift Testing 테스트 작성
 
-Swift Testing 프레임워크를 사용하여 테스트 코드를 작성한다.
-tester 에이전트의 TDD 사이클에서 호출되거나, 사용자가 `/tdd-workflow {대상}`으로 직접 호출할 수 있다.
+Swift Testing 프레임워크를 사용하여 TDD 사이클(Red → Green → Refactor)을 수행한다.
 
-컨벤션은 `.claude/rules/testing.md`를 따른다.
+## When to Activate
+
+- tester 에이전트가 TDD 사이클을 수행할 때
+- 새 기능 구현 전 테스트를 먼저 작성해야 할 때
+- 버그 수정 전 재현 테스트를 작성해야 할 때
+- 사용자가 `/tdd-workflow`로 직접 호출할 때
+
+컨벤션은 `.claude/rules/swift-testing.md`를 따른다.
 
 ## ARGUMENTS
 

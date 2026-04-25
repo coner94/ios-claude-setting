@@ -1,4 +1,4 @@
-# 테스트 규칙
+# swift-testing
 
 Swift Testing 프레임워크를 사용한다.
 

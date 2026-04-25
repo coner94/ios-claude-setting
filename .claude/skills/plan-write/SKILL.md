@@ -1,13 +1,17 @@
 ---
 name: plan-write
-description: 구현 계획을 정해진 템플릿으로 작성하고 .claude/plans/에 저장한다. planner 에이전트가 호출하거나 사용자가 /plan-write로 직접 호출할 수 있다.
+description: 구현 계획을 정해진 템플릿으로 작성하고 .claude/plans/에 저장한다.
 allowed-tools: Read, Glob, Grep, Write, Edit
 ---
 
 # plan-write — 구현 계획 작성 및 저장
 
 planner 에이전트의 분석 결과를 `.claude/plans/`에 저장한다.
-사용자가 `/plan-write {기능명}`으로 직접 호출할 수도 있다.
+
+## When to Activate
+
+- planner 에이전트가 설계 분석을 완료하고 계획 저장을 요청할 때
+- 사용자가 `/plan-write`로 직접 호출할 때
 
 ## 인자
 

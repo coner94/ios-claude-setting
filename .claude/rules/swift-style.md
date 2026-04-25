@@ -1,30 +1,24 @@
-# Swift 코드 컨벤션
+# swift-style
 
 Swift.org API Design Guidelines를 기본으로 따른다.
 
+## 포맷팅
+
+- **SwiftFormat**: 자동 포맷팅 도구. 커밋 전 실행한다
+- **SwiftLint**: 스타일 규칙 강제. `--strict` 옵션으로 warning도 실패 처리
+- Xcode 16+에 내장된 `swift-format`을 대안으로 사용할 수 있다
+
 ## 네이밍
 
-### 일반 원칙
-- 명확성이 간결성보다 우선한다
-- 사용 시점에서 의미가 명확한 이름을 사용한다
+[Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/)를 따른다.
+
+프로젝트 추가 규칙:
 - 약어를 피한다 (`btn` → `button`, `vc` → `viewController`)
-
-### 타입
-- UpperCamelCase: `struct`, `class`, `enum`, `protocol`, `typealias`
-- Protocol: 능력을 나타내면 `-able`, `-ible` 접미사 (예: `Codable`, `Identifiable`)
-- Protocol: 역할을 나타내면 명사 (예: `Repository`, `DataSource`)
-
-### 함수 & 변수
-- lowerCamelCase: 함수, 변수, 상수
 - Bool 변수는 `is`, `has`, `should`, `can` 접두사 (예: `isLoading`, `hasError`)
 - 팩토리 메서드는 `make` 접두사 (예: `makeViewModel()`)
-- 부수효과 없는 함수는 명사구 (예: `distance(to:)`)
-- 부수효과 있는 함수는 동사구 (예: `sort()`, `append(_:)`)
-- mutating/non-mutating 쌍: `-ed`, `-ing` 접미사 (예: `sorted()`, `removing()`)
-
-### 파일
+- 상수는 전역 상수 대신 `static let`을 사용한다
 - 파일명은 주요 타입명과 일치시킨다 (예: `LoginViewModel.swift`)
-- Extension: `{타입}+{기능}.swift` (예: `String+Validation.swift`)
+- Extension 파일: `{타입}+{기능}.swift` (예: `String+Validation.swift`)
 
 ## 코드 구조
 
@@ -118,16 +112,31 @@ let name: String = "Claude"
 - 연관값 있는 enum 활용을 권장한다
 - 모든 case를 다루는 `switch`에서 `default` 사용 금지
 
-### struct vs class
-- 값 타입(`struct`)을 기본으로 사용한다
-- 참조 시맨틱이 필요하거나 상속이 필요할 때만 `class`
+### 불변성
+- `let`을 기본으로 선언하고, 컴파일러가 요구할 때만 `var`로 변경한다
+- 값 타입(`struct`)을 기본으로 사용한다. 참조 시맨틱이 필요하거나 상속이 필요할 때만 `class`
 - `@Observable` 사용 시 `class` 허용
 
 ### 에러 처리
 - 커스텀 에러는 `Error` 프로토콜을 채택한 enum으로 정의
 - 에러 케이스명은 구체적으로 (예: `networkTimeout`, `invalidResponse`)
+- Swift 6+에서는 typed throws를 사용한다
+
+```swift
+// Good
+func load(id: String) throws(LoadError) -> Item {
+    guard let data = try? read(from: path) else {
+        throw .fileNotFound(id)
+    }
+    return try decode(data)
+}
+```
 
 ### 동시성
+- Swift 6 strict concurrency checking을 활성화한다
 - `async/await` 사용, completion handler 지양
 - `@MainActor`는 ViewModel과 UI 관련 코드에 적용
 - `Task`는 View나 ViewModel에서만 생성
+- 격리 경계를 넘는 데이터는 `Sendable` 값 타입을 사용한다
+- 공유 가변 상태는 `actor`로 보호한다
+- 비구조적 `Task {}` 대신 구조적 동시성(`async let`, `TaskGroup`)을 우선한다
