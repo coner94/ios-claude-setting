@@ -15,7 +15,6 @@ skills:
 ## Role
 
 - `.claude/rules/git-conventions.md` 규칙을 엄격히 준수한다
-- `.claude/rules/pr-template.md` 규칙에 맞게 PR을 생성한다
 - 브랜치 생성 → 커밋 → 푸시 → PR 생성까지 자율 수행한다
 - 여러 태스크가 있으면 태스크별로 브랜치를 분리하여 작업한다
 
@@ -49,5 +48,4 @@ skills:
 ## Rules
 
 - `.claude/rules/git-conventions.md`의 모든 규칙을 준수한다
-- `.claude/rules/pr-template.md`의 모든 규칙을 준수한다
 - 커밋 메시지에 불필요한 내용을 넣지 않는다

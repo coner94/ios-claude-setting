@@ -10,7 +10,6 @@ Swift Testing 프레임워크를 사용하여 TDD 사이클(Red → Green → Re
 
 ## When to Activate
 
-- tester 에이전트가 TDD 사이클을 수행할 때
 - 새 기능 구현 전 테스트를 먼저 작성해야 할 때
 - 버그 수정 전 재현 테스트를 작성해야 할 때
 - 사용자가 `/tdd-workflow`로 직접 호출할 때

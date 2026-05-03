@@ -1,16 +1,16 @@
 ---
 name: pull-request
-description: git-conventions.md, pr-template.md 규칙에 맞게 PR을 생성한다.
+description: PR을 생성한다.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Pull Request 생성
 
-`.claude/rules/git-conventions.md` 규칙에 따라 PR을 생성한다.
+PR을 생성한다.
 
 ## When to Activate
 
-- git 에이전트가 커밋/푸시 완료 후 PR 생성을 요청할 때
+- `git-manager` 에이전트가 PR 생성을 요청할 때
 - 사용자가 `/pull-request`로 직접 호출할 때
 
 ## 인자

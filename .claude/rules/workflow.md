@@ -23,7 +23,7 @@ SELECT → PLAN → BRANCH → TDD → GATE → COMMIT → PROGRESS → NEXT
 - 이미 작업 브랜치에 있으면 건너뛴다
 
 ### 4. TDD (Red → Green → Refactor)
-- `tester` 에이전트로 TDD 사이클을 수행한다
+- `/tdd-workflow` 스킬로 TDD 사이클을 수행한다
   - Red: 실패하는 테스트를 먼저 작성한다
   - Green: 테스트를 통과시키기 위한 최소한의 구현을 작성한다
 - Gate 1(빌드) + Gate 3(테스트) 통과를 확인한다
