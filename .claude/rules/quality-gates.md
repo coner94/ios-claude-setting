@@ -4,14 +4,14 @@
 
 ## 게이트 정의
 
-### Gate 1: 빌드
+### Gate 1: Build
 ```bash
-xcodebuild build -scheme {Scheme} -destination 'platform=iOS Simulator,name=iPhone 16' | xcpretty
+xcodebuild build -scheme {Scheme} -destination 'generic/platform=iOS Simulator' | xcpretty
 ```
 - 통과 조건: exit code 0, 빌드 경고 0개
 - 빌드 경고가 있으면 원인을 파악하고 제거한다
 
-### Gate 2: 린트
+### Gate 2: Lint
 ```bash
 swiftlint lint --strict
 ```
@@ -19,38 +19,29 @@ swiftlint lint --strict
 - SwiftLint 미설치 시 `.claude/rules/swift-style.md` 기준으로 수동 검증
 - `--strict` 옵션으로 warning도 실패로 처리
 
-### Gate 3: 단위 테스트
+### Gate 3: Unit Test
 ```bash
-xcodebuild test -scheme {Scheme} -destination 'platform=iOS Simulator,name=iPhone 16' | xcpretty
+xcodebuild test -scheme {Scheme} -destination 'platform=iOS Simulator,OS=latest' | xcpretty
 ```
 - 통과 조건: 전체 테스트 통과, 새 코드에 대한 테스트 존재
 - 테스트 없는 코드는 머지하지 않는다
 
-### Gate 4: 컨벤션 준수
-수동 체크리스트:
-- [ ] 네이밍이 `swift-style.md` 규칙을 따르는가
-- [ ] 접근 제어가 최소 권한으로 설정되었는가
-- [ ] 강제 언래핑(`!`)이 없는가
-- [ ] `async/await`를 사용하고 completion handler가 없는가
-- [ ] `@MainActor`가 ViewModel/UI 코드에만 적용되었는가
-- [ ] 테스트가 Given-When-Then 구조를 따르는가
-- [ ] 커밋 메시지가 `git-conventions.md` 컨벤션을 따르는가
+### Gate 4: Optimization
+- 메인 스레드를 블로킹하는 동기 작업이 없는가
+- 반복 호출되는 경로에 무거운 연산이 없는가
+- SwiftUI 최적화는 `/swiftui-patterns` 스킬의 Performance 섹션을 참조한다
+- 이슈 발견 시 수정 후 Gate 1부터 재실행한다
 
-### Gate 5: PR 준수
-- [ ] PR 크기 300줄 이하 (자동 생성 파일 제외)
-- [ ] `pr-template.md` 형식에 맞는 제목과 본문
-- [ ] 테스트 체크리스트 포함
+### Gate 5: Safety
+- Swift 6 Concurrency 데이터 레이스 위험이 없는가
+- 강제 언래핑(`!`)이 없는가
+- 에러 핸들링 누락이 없는가
+- 메모리 릭, 강한 순환 참조가 없는가
+- 이슈 발견 시 수정 후 Gate 1부터 재실행한다
 
-## 에이전트별 게이트 요구사항
-
-| 에이전트 | 필수 게이트 |
-|---|---|
-| planner | 없음 (계획만 수립) |
-| tester | Gate 1, 2, 3 |
-| reviewer | Gate 4 |
-| git (PR) | Gate 1, 2, 3, 4, 5 |
-| refactorer (선택) | Gate 1, 2, 3 |
-| debugger (선택) | Gate 1, 3 |
+### Gate 6: Code Review
+- `/code-review` 스킬을 실행한다
+- Critical, Warning 이슈 발견 시 수정 후 Gate 1부터 재실행한다
 
 ## 실패 정책
 

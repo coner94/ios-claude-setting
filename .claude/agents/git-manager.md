@@ -1,5 +1,5 @@
 ---
-name: git
+name: git-manager
 description: Git 워크플로우 전문가. 다른 에이전트의 요청 또는 직접 호출 시 git-conventions.md 규칙에 따라 브랜치 생성, 커밋, 푸시, PR 생성을 자율 수행한다.
 model: sonnet
 permissionMode: bypassPermissions

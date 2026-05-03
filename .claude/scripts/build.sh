@@ -5,7 +5,7 @@
 # 사용법: .claude/scripts/build.sh [--scheme SCHEME] [--destination DEST]
 
 SCHEME="${SCHEME:-__PROJECT_SCHEME__}"
-DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 16}"
+DESTINATION="${DESTINATION:-generic/platform=iOS Simulator}"
 
 # 인자 파싱
 while [[ $# -gt 0 ]]; do

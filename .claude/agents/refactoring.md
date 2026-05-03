@@ -1,5 +1,5 @@
 ---
-name: refactorer
+name: refactoring
 description: iOS 코드 리팩토링 전문가. 코드 중복 제거, 구조 개선, 성능 최적화를 수행하며 기존 동작을 변경하지 않는다.
 model: sonnet
 permissionMode: bypassPermissions

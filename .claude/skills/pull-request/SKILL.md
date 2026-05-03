@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Pull Request 생성
 
-`.claude/rules/git-conventions.md`와 `.claude/rules/pr-template.md` 규칙에 따라 PR을 생성한다.
+`.claude/rules/git-conventions.md` 규칙에 따라 PR을 생성한다.
 
 ## When to Activate
 
