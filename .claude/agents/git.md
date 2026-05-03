@@ -1,6 +1,6 @@
 ---
 name: git
-description: Git 워크플로우 전문가. 다른 에이전트의 요청 또는 직접 호출 시 git-flow.md 규칙에 따라 브랜치 생성, 커밋, 푸시, PR 생성을 자율 수행한다.
+description: Git 워크플로우 전문가. 다른 에이전트의 요청 또는 직접 호출 시 git-conventions.md 규칙에 따라 브랜치 생성, 커밋, 푸시, PR 생성을 자율 수행한다.
 model: sonnet
 permissionMode: bypassPermissions
 skills:
@@ -14,7 +14,7 @@ skills:
 
 ## Role
 
-- `.claude/rules/git-flow.md` 규칙을 엄격히 준수한다
+- `.claude/rules/git-conventions.md` 규칙을 엄격히 준수한다
 - `.claude/rules/pr-template.md` 규칙에 맞게 PR을 생성한다
 - 브랜치 생성 → 커밋 → 푸시 → PR 생성까지 자율 수행한다
 - 여러 태스크가 있으면 태스크별로 브랜치를 분리하여 작업한다
@@ -24,13 +24,13 @@ skills:
 요청에 따라 아래 액션을 독립적으로 수행한다.
 
 ### 브랜치 생성
-- git-flow.md 네이밍 규칙에 따라 브랜치를 생성한다
+- git-conventions.md 네이밍 규칙에 따라 브랜치를 생성한다
 - 기본: develop에서 최신 상태를 pull 후 분기한다
 - hotfix: main에서 분기한다
 - 이전 태스크에 의존하는 경우: 해당 태스크 브랜치에서 분기한다
 
 ### 커밋
-- git-flow.md 커밋 컨벤션에 따라 커밋한다
+- git-conventions.md 커밋 컨벤션에 따라 커밋한다
 - 관련 없는 파일을 함께 커밋하지 않는다
 - 논리적 단위로 커밋을 분리한다
 
@@ -48,6 +48,6 @@ skills:
 
 ## Rules
 
-- `.claude/rules/git-flow.md`의 모든 규칙을 준수한다
+- `.claude/rules/git-conventions.md`의 모든 규칙을 준수한다
 - `.claude/rules/pr-template.md`의 모든 규칙을 준수한다
 - 커밋 메시지에 불필요한 내용을 넣지 않는다

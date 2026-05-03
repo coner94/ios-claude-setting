@@ -34,7 +34,7 @@ xcodebuild test -scheme {Scheme} -destination 'platform=iOS Simulator,name=iPhon
 - [ ] `async/await`를 사용하고 completion handler가 없는가
 - [ ] `@MainActor`가 ViewModel/UI 코드에만 적용되었는가
 - [ ] 테스트가 Given-When-Then 구조를 따르는가
-- [ ] 커밋 메시지가 `git-flow.md` 컨벤션을 따르는가
+- [ ] 커밋 메시지가 `git-conventions.md` 컨벤션을 따르는가
 
 ### Gate 5: PR 준수
 - [ ] PR 크기 300줄 이하 (자동 생성 파일 제외)

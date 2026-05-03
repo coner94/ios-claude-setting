@@ -1,4 +1,4 @@
-# git-flow
+# git-conventions
 
 ## 브랜치 구조
 

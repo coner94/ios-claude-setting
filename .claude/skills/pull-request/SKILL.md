@@ -1,12 +1,12 @@
 ---
 name: pull-request
-description: git-flow.md, pr-template.md 규칙에 맞게 PR을 생성한다.
+description: git-conventions.md, pr-template.md 규칙에 맞게 PR을 생성한다.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Pull Request 생성
 
-`.claude/rules/git-flow.md`와 `.claude/rules/pr-template.md` 규칙에 따라 PR을 생성한다.
+`.claude/rules/git-conventions.md`와 `.claude/rules/pr-template.md` 규칙에 따라 PR을 생성한다.
 
 ## When to Activate
 

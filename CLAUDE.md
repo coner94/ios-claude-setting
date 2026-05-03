@@ -1,71 +1,83 @@
 # CLAUDE.md
 
-Claude Code 하네스 진입점. 에이전트 역할 분담, 자율 실행 루프, 품질 게이트를 정의한다.
+프로젝트 규칙 진입점. 실행 워크플로우, 품질 게이트, 프로젝트 추적 구조, Swift/Git/테스트 규칙 참조를 정의한다.
 
-## 프로젝트 정보
+## Project Overview
 
-프로젝트 관련 정보는 **`README.md`** 를 참조한다.
+프로젝트 구성, 기술 스택, 프로젝트 빌드 및 실행 방법, 디렉토리 구조 등 프로젝트 전반에 대한 정보는 `README.md`를 참조한다.
 
-## 실행 모델
+## Guidelines
 
-### 워크플로우
+아래 원칙들은 속도보다 신중함을 우선한다. 사소한 작업은 판단에 따라 유연하게 적용한다.
 
-```
-SELECT → PLAN → BRANCH → TDD → VERIFY → COMMIT → PROGRESS → NEXT
-```
+### 1. 코드를 작성하기 전에 생각해라
 
-상세 → `.claude/rules/execution-loop.md`
+**가정하지 말고, 혼란을 숨기지 말고, 트레이드오프를 드러내라.**
 
-### 에이전트 역할 순서
+구현 전에:
+- 가정이 있으면 명시하고 진행한다.
+- 해석이 여러 가지라면 가장 합리적인 것을 선택하고 이유를 남긴다.
+- 더 단순한 접근이 있다면 먼저 시도한다.
+- workflow.md의 에스컬레이션 조건에 해당하면 멈추고 사용자에게 보고한다.
 
-```
-planner → git(브랜치) → tester(TDD) → reviewer → git(커밋/PR)
-```
+### 2. 문제를 해결하는 최소한의 코드만 작성한다.
 
-| 에이전트 | 역할 | 모델 |
-|---|---|---|
-| planner | 상태 파악, 요구사항 분석, 태스크 분해 | opus |
-| tester | TDD 사이클(Red → Green → Refactor) 수행 | sonnet |
-| reviewer | 코드 품질, 컨벤션, 잠재 버그 검토 | sonnet |
-| git | 브랜치, 커밋, 푸시, PR | sonnet |
-| refactorer | 동작 변경 없는 코드 개선 (요청 시에만 호출) | sonnet |
-| debugger | 진단 → 수정 → 검증 (버그 발생 시에만 호출) | opus |
+**문제를 해결하는 최소한의 코드. 추측성 코드는 없다.**
 
-### 품질 게이트
+- 요청받은 것 이상의 기능은 추가하지 않는다.
+- 단일 사용 코드에 추상화를 만들지 않는다.
+- 요청하지 않은 "유연성"이나 "설정 가능성"은 넣지 않는다.
+- 불가능한 시나리오에 대한 에러 처리는 하지 않는다.
+- 200줄로 썼는데 50줄이 가능하다면, 다시 써라.
+- 코드 작성 후 스스로에게 물어라: "시니어 엔지니어가 이 코드를 보면 과하다고 할까?" 답이 yes라면 단순화하고 다시 작성하라.
 
-| Gate | 검증 | 도구 |
-|---|---|---|
-| 1. 빌드 | 컴파일 성공, 경고 0 | xcodebuild |
-| 2. 린트 | 스타일 위반 0 | SwiftLint |
-| 3. 테스트 | 전체 통과, 새 코드 커버리지 | xcodebuild test |
-| 4. 컨벤션 | Swift/Git/테스트 규칙 준수 | 수동 체크 |
-| 5. PR | 300줄 이하, 템플릿 준수 | gh |
+### 3. 반드시 필요한 곳만, 정확하게 변경한다.
 
-상세 → `.claude/rules/quality-gates.md`
+**요청 범위만 수정하고, 내가 만든 것만 정리한다.**
 
-### Hook 자동화
+기존 코드를 수정할 때:
+- 요청 범위 밖의 코드, 주석, 포맷은 건드리지 않는다.
+- 작동하는 코드는 리팩토링하지 않는다.
+- 내 취향과 달라도 기존 코드 스타일을 그대로 따른다.
+- 요청과 무관한 데드 코드를 발견하면 삭제하지 않고, 모든 작업 완료 후 사용자에게 전달한다.
 
-| 시점 | 동작 | 스크립트 |
-|---|---|---|
-| 커밋 전 (PreToolUse) | staged Swift 파일 SwiftLint 검증 | `.claude/scripts/lint.sh` |
-| 파일 수정 후 (PostToolUse) | xcodebuild 빌드 검증 | `.claude/scripts/build.sh` |
+내 변경으로 불필요해진 코드가 있다면:
+- 내 변경으로 인해 더 이상 쓰이지 않는 import, 변수, 함수는 제거한다.
+- 원래부터 있던 데드 코드는 요청이 없으면 그대로 둔다.
 
-### 프로젝트 추적
+수정한 모든 줄은 사용자의 요청으로 설명될 수 있어야 한다.
 
-| 파일 | 역할 | 관리 주체 |
-|---|---|---|
-| `.claude/tracking/BACKLOG.md` | 태스크 백로그 | planner(선택) + 메인(업데이트) |
-| `.claude/tracking/PROGRESS.md` | 세션 간 핸드오프 | planner(읽기) + 메인(쓰기) |
-| `.claude/tracking/decisions.md` | 아키텍처 의사결정 기록 | 필요 시 기록 |
+### 4. 목표 중심 실행
 
-### 새 대화 시작 시
+**성공 기준을 정의하고, 검증될 때까지 반복한다.**
 
-1. `planner`를 호출하여 `.claude/tracking/PROGRESS.md`, `.claude/tracking/BACKLOG.md`, `.claude/plans/`를 확인한다
-2. 사용자에게 현재 상태를 요약한다
-3. 이어서 작업할지 확인한다
+- 모든 실행은 `workflow.md`에 정의된 흐름을 따른다.
+- 각 단계는 완료 조건이 충족될 때까지 반복한다.
+- 성공 기준이 명확할수록 사용자 개입 없이 독립적으로 실행할 수 있다.
+- 기준이 모호하면 `workflow.md`의 에스컬레이션 조건에 따라 중단하고 보고한다.
 
-## 규칙 및 청사진
+## Context Management
 
-- 규칙 → `.claude/rules/`
-- 에이전트 정의 → `.claude/agents/`
-- 스킬 정의 → `.claude/skills/`
+- 컨텍스트 사용량이 40%를 초과하면 사용자에게 알린다.
+- 현재까지의 진행 상황을 `tracking/{기능명}/PROGRESS.md`에 기록한다.
+- 새 대화에서 이어서 작업할 수 있도록 충분한 정보를 남긴다.
+
+## Tracking
+
+`.claude/tracking/{기능명}`을 확인한다.
+
+| 파일 | 역할 |
+|---|---|
+| `BACKLOG.md` | 태스크 백로그 |
+| `PROGRESS.md` | 세션 간 핸드오프 |
+| `decisions.md` | 아키텍처 의사결정 기록 |
+
+## Rules
+
+| 파일 | 설명 |
+|---|---|
+| `.claude/rules/workflow.md` | 자율 실행 사이클 (SELECT → NEXT) 정의 |
+| `.claude/rules/quality-gates.md` | 빌드/린트/테스트/컨벤션/PR 게이트 정의 |
+| `.claude/rules/git-conventions.md` | 브랜치 전략 및 커밋 컨벤션 |
+| `.claude/rules/swift-style.md` | Swift 코드 스타일 및 네이밍 규칙 |
+| `.claude/rules/swift-testing.md` | Swift Testing 기반 테스트 작성 규칙 |

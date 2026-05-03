@@ -1,4 +1,4 @@
-# execution-loop
+# workflow
 
 Claude가 태스크를 자율적으로 수행할 때 따르는 실행 사이클이다.
 
@@ -10,16 +10,16 @@ SELECT → PLAN → BRANCH → TDD → VERIFY → REVIEW → COMMIT → PROGRESS
 
 ### 1. SELECT
 - `planner` 에이전트를 호출하여 현재 상태를 파악한다
-  - planner가 tracking/BACKLOG.md, tracking/PROGRESS.md, plans/를 읽고 다음 태스크를 선택한다
+  - planner가 tracking/ 하위 기능별 BACKLOG.md, PROGRESS.md를 읽고 다음 태스크를 선택한다
 - planner의 보고를 받아 메인 Claude가 tracking/BACKLOG.md의 상태를 `IN_PROGRESS`로 업데이트한다
 
 ### 2. PLAN
 - `planner` 에이전트로 구현 계획을 수립한다
-- 사용자 확인을 받은 뒤 `/plan-write` 스킬로 저장한다
+- 사용자 확인을 받은 뒤 `/create-plan` 스킬로 저장한다
 - 이미 계획이 있으면 건너뛴다
 
 ### 3. BRANCH
-- `git` 에이전트로 `git-flow.md` 규칙에 따라 브랜치를 생성한다
+- `git` 에이전트로 `git-conventions.md` 규칙에 따라 브랜치를 생성한다
 - 이미 작업 브랜치에 있으면 건너뛴다
 
 ### 4. TDD (Red → Green → Refactor)
@@ -39,7 +39,7 @@ SELECT → PLAN → BRANCH → TDD → VERIFY → REVIEW → COMMIT → PROGRESS
 - Critical 이슈 없으면 다음 단계로 진행한다
 
 ### 7. COMMIT — `git`
-- `git-flow.md` 커밋 컨벤션에 따라 커밋한다
+- `git-conventions.md` 커밋 컨벤션에 따라 커밋한다
 - 다중 태스크 시 태스크별로 커밋한다
 
 ### 8. PROGRESS
@@ -55,7 +55,7 @@ SELECT → PLAN → BRANCH → TDD → VERIFY → REVIEW → COMMIT → PROGRESS
 ## 새 대화 시작 시
 
 1. `planner` 에이전트를 호출하여 상태를 파악한다 (Step 0)
-   - planner가 tracking/PROGRESS.md, tracking/BACKLOG.md, plans/를 분석한다
+   - planner가 tracking/ 하위 기능별 PROGRESS.md, BACKLOG.md를 분석한다
 2. planner의 보고를 바탕으로 사용자에게 현재 상태를 요약한다
 3. 이어서 작업할지 사용자에게 확인한다
 
@@ -69,17 +69,11 @@ SELECT → PLAN → BRANCH → TDD → VERIFY → REVIEW → COMMIT → PROGRESS
 - 계획에 없는 추가 작업이 필요할 때
 - 요구사항이 모호하거나 상충할 때
 
-## 컨텍스트 관리
-
-- 컨텍스트 사용량이 40%를 초과하면 사용자에게 알린다
-- 현재까지의 진행 상황을 tracking/PROGRESS.md에 기록한다
-- 새 대화에서 이어서 작업할 수 있도록 충분한 정보를 남긴다
-
 ## Integration with Other Rules
 
 | 파일 | 설명 |
 |---|---|
-| [`git-flow.md`](.claude/rules/git-flow.md) | BRANCH, COMMIT 단계에서 사용하는 브랜치 전략 및 커밋 컨벤션 |
+| [`git-conventions.md`](.claude/rules/git-conventions.md) | BRANCH, COMMIT 단계에서 사용하는 브랜치 전략 및 커밋 컨벤션 |
 | [`quality-gates.md`](.claude/rules/quality-gates.md) | VERIFY 단계에서 실행하는 게이트 정의 및 실패 정책 |
 | [`swift-style.md`](.claude/rules/swift-style.md) | GREEN, REFACTOR 단계에서 준수하는 Swift 코드 컨벤션 |
 | [`swift-testing.md`](.claude/rules/swift-testing.md) | RED, GREEN 단계에서 준수하는 테스트 작성 규칙 |

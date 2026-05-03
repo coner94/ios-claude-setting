@@ -24,9 +24,7 @@ permissionMode: plan
 ## Process
 
 ### Step 0: 상태 파악 (새 대화 또는 태스크 시작 시)
-- `.claude/tracking/PROGRESS.md`를 읽어 마지막 세션 상태를 확인한다
-- `.claude/tracking/BACKLOG.md`를 읽어 다음 TODO 태스크를 식별한다
-- `.claude/plans/`에서 미완료 계획 파일을 확인한다
+- `.claude/tracking/`을 탐색하여 기능별 PROGRESS.md, BACKLOG.md를 확인한다
 - 이어서 작업할 태스크가 있으면 해당 태스크를 선택한다
 - 결과를 메인 Claude에 보고한다 (메인 Claude가 BACKLOG 상태를 IN_PROGRESS로 업데이트)
 
@@ -42,8 +40,8 @@ permissionMode: plan
 - 필요한 프로토콜, 모델, ViewModel 등을 정의한다
 
 ### Step 3: 구현 계획 작성
-- `/plan-write` 스킬의 템플릿 형식에 맞게 계획을 출력한다
-- 파일 저장은 메인 Claude가 `/plan-write` 스킬로 수행한다
+- `/create-plan` 스킬의 템플릿 형식에 맞게 계획을 출력한다
+- 파일 저장은 메인 Claude가 `/create-plan` 스킬로 수행한다
 
 ## Rules
 
