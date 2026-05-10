@@ -76,7 +76,6 @@
 | 파일 | 설명 |
 |---|---|
 | `.claude/rules/workflow.md` | 자율 실행 사이클 (SELECT → NEXT) 정의 |
-| `.claude/rules/quality-gates.md` | 빌드/린트/테스트/컨벤션/PR 게이트 정의 |
 | `.claude/rules/git-conventions.md` | 브랜치 전략 및 커밋 컨벤션 |
 | `.claude/rules/swift-style.md` | Swift 코드 스타일 및 네이밍 규칙 |
 | `.claude/rules/swift-testing.md` | Swift Testing 기반 테스트 작성 규칙 |

@@ -1,6 +1,6 @@
 ---
 name: pull-request
-description: PR을 생성한다.
+description: PR을 생성한다. draft 인자를 전달하면 드래프트 PR로 생성한다.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -17,7 +17,9 @@ PR을 생성한다.
 
 - `$ARGUMENTS`: PR 관련 정보 (선택)
   - 예: `/pull-request`
+  - 예: `/pull-request draft`
   - 예: `/pull-request PROJ-123`
+  - 예: `/pull-request draft PROJ-123`
   - 예: `/pull-request base:main`
 
 ---
@@ -104,9 +106,14 @@ diff를 분석하여 아래 템플릿을 채운다.
 # 리모트 푸시 (아직 안 된 경우)
 git push -u origin {branch-name}
 
-# PR 생성
-gh pr create --base {base} --title "{title}" --body "{body}"
+# PR 생성 (draft 여부 판단)
+# $ARGUMENTS에 'draft'가 포함되면 --draft 플래그 추가
+gh pr create --base {base} --title "{title}" --body "{body}"          # 일반 PR
+gh pr create --base {base} --title "{title}" --body "{body}" --draft  # 드래프트 PR
 ```
+
+- `$ARGUMENTS`에 `draft`가 포함되면 `--draft` 플래그를 사용한다
+- `git-manager` 에이전트가 호출 시 draft 여부를 인자로 전달한다
 
 ---
 

@@ -29,7 +29,7 @@ SELECT → PLAN → BRANCH → TDD → GATE → COMMIT → PROGRESS → NEXT
 - Gate 1(빌드) + Gate 3(테스트) 통과를 확인한다
 
 ### 5. GATE
-- `quality-gates.md`의 Gate 1~6을 순서대로 실행한다
+- `/quality-gates` 스킬을 실행한다
 
 ### 6. COMMIT
 - `git-manager` 에이전트로 커밋한다
@@ -44,7 +44,7 @@ SELECT → PLAN → BRANCH → TDD → GATE → COMMIT → PROGRESS → NEXT
 ### 8. NEXT
 - 다음 태스크가 있으면 Step 4(TDD)로 돌아간다
 - 모든 태스크 완료 시:
-  1. `git-manager` 에이전트로 푸시 + PR 생성
+  1. `git-manager` 에이전트로 푸시 + `/pull-request draft` 스킬로 드래프트 PR 생성
   2. `/handoff` 스킬로 `docs/{기능명}.md` 문서화
 
 ## 새 대화 시작 시
@@ -68,4 +68,4 @@ SELECT → PLAN → BRANCH → TDD → GATE → COMMIT → PROGRESS → NEXT
 
 | 파일 | 설명 |
 |---|---|
-| [`quality-gates.md`](.claude/rules/quality-gates.md) | GATE 단계에서 실행하는 게이트 정의 및 실패 정책 |
+| `/quality-gates` 스킬 | GATE 단계에서 실행하는 게이트 정의 및 실패 정책 |
